@@ -15,19 +15,45 @@ void OpenGLWidget::initializeGL() {
   glEnable(GL_DEPTH_TEST);
 }
 
-void OpenGLWidget::resizeGL(int w, int h) {}
+void OpenGLWidget::resizeGL(int w, int h) {
+  glViewport(0, 0, w, h);
+  camera.resizeViewPort(w, h);
+}
 
 void OpenGLWidget::paintGL() {
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   if (!model) {
     return;
   }
 
+  if (wireframe)
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  else
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+  camera.resizeViewPort(this->width(), this->height(), orthographic);
+
+  model->modelMatrix.setToIdentity();
+  model->rescaleModel();
+
+  glBindVertexArray(model->vao);
   auto shaderProgramID{model->shaderProgram[model->currentShader]};
   glUseProgram(shaderProgramID);
 
-  glBindVertexArray(model->vao);
+  auto locModel{glGetUniformLocation(shaderProgramID, "model")};
+  auto locView{glGetUniformLocation(shaderProgramID, "view")};
+  auto locProjection{glGetUniformLocation(shaderProgramID, "projection")};
+
+  qDebug() << camera.projectionMatrix;
+  qDebug() << orthographic;
+
+  glUniformMatrix4fv(locModel, 1, GL_FALSE, model->modelMatrix.data());
+  glUniformMatrix4fv(locView, 1, GL_FALSE, camera.viewMatrix.data());
+  glUniformMatrix4fv(locProjection, 1, GL_FALSE,
+                     camera.projectionMatrix.data());
+
   glDrawElements(GL_TRIANGLES, model->numFaces * 3, GL_UNSIGNED_INT, nullptr);
 }
 
@@ -217,6 +243,18 @@ void OpenGLWidget::showFileOpenDialog() {
                             .arg(model->numVertices)
                             .arg(model->numFaces));
 
+  update();
+}
+
+void OpenGLWidget::toggleWireframe(bool wire) {
+  makeCurrent();
+  wireframe = wire;
+  update();
+}
+
+void OpenGLWidget::toggleOrthographic(bool ortho) {
+  makeCurrent();
+  orthographic = ortho;
   update();
 }
 

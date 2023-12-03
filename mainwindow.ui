@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>998</width>
+    <height>690</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -18,6 +18,13 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="0">
+     <widget class="QCheckBox" name="checkBoxWireframe">
+      <property name="text">
+       <string>wireframe</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="OpenGLWidget" name="openGLWidget"/>
     </item>
@@ -28,6 +35,13 @@
       </property>
      </widget>
     </item>
+    <item row="3" column="0">
+     <widget class="QCheckBox" name="checkBoxOrthographic">
+      <property name="text">
+       <string>ortographifc</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -35,7 +49,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>998</width>
      <height>21</height>
     </rect>
    </property>
@@ -63,6 +77,8 @@
     <signal>statusBarMessage(QString)</signal>
     <slot>toggleDarkMode(bool)</slot>
     <slot>showFileOpenDialog()</slot>
+    <slot>toggleWireframe(bool)</slot>
+    <slot>toggleOrthographic(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -113,6 +129,38 @@
     <hint type="destinationlabel">
      <x>399</x>
      <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxWireframe</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>toggleWireframe(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>498</x>
+     <y>619</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>498</x>
+     <y>302</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxOrthographic</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>toggleOrthographic(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>498</x>
+     <y>647</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>498</x>
+     <y>302</y>
     </hint>
    </hints>
   </connection>

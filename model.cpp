@@ -63,9 +63,9 @@ void Model::computeBBox() {
 
 void Model::rescaleModel() {
   computeBBox();
-  float scale = 2.5f / diagonalBB;
-  for (size_t i = 0; i < numVertices; ++i) {
-    vertices[i] = QVector4D((vertices[i].toVector3D() - centroidBB) * scale, 1);
-  }
-  computeBBox();
+
+  float invdiag{2.5f / diagonalBB};
+
+  modelMatrix.scale(invdiag, invdiag, invdiag);
+  modelMatrix.translate(-centroidBB);
 }

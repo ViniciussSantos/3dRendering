@@ -9,6 +9,7 @@
 #include <QOpenGLWidget>
 #include <QTimer>
 #include <QVector4D>
+#include <camera.h>
 #include <memory>
 #include <model.h>
 
@@ -30,11 +31,17 @@ public:
 
   void createShaders(std::shared_ptr<Model>);
   void destroyShaders(std::shared_ptr<Model>);
+  bool wireframe{false};
+  bool orthographic{false};
+  Camera camera;
+
 signals:
   void statusBarMessage(QString);
 
 public slots:
   void toggleDarkMode(bool);
+  void toggleWireframe(bool);
+  void toggleOrthographic(bool);
   void showFileOpenDialog();
 
 signals:
